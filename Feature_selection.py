@@ -115,4 +115,10 @@ def select_least_k_features(correlation_matrix, k):
     print (selected_features)
     return selected_features
 
-select_least_k_features(find_correlation() , 3)
+
+selected_features = select_least_k_features(find_correlation(), 3)
+
+# save selected features
+with open("selected_features.txt", "w") as f:
+    for feature in selected_features:
+        f.write(str(feature) + "\n")
