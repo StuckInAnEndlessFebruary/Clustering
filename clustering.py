@@ -91,3 +91,6 @@ plt.figure(figsize=(10, 8))
 sns.heatmap(cluster_means, annot=True, cmap="YlGnBu", fmt=".2f")
 plt.title("Heatmap of Cluster Features")
 plt.show()
+
+
+df.to_csv("clustered_data.csv", index=False)
