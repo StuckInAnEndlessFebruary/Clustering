@@ -7,7 +7,9 @@ from sklearn.manifold import TSNE
 from mpl_toolkits.mplot3d import Axes3D
 
 # Load clustered data
-df = pd.read_csv("clustered_data.csv")
+# df = pd.read_csv("clustered_data.csv")
+df = pd.read_csv("clustered_results.csv")
+
 labels = df["cluster"].values
 
 # Select only feature columns (excluding label and cluster columns)

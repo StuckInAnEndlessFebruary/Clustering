@@ -25,7 +25,7 @@ def find_correlation():
             #test
             # print(mean)
         
-        mean_feature.append(mean / len(data_array)-1)
+        mean_feature.append(mean / (len(data_array)-1))
 
     
     correlation_matrix = np.zeros((len(data_array[0])-1,len(data_array[0])-1))
@@ -49,11 +49,11 @@ def find_correlation():
             correlation_matrix[j][i] = correlation_matrix[i][j]
 
 
-    #     # Save the correlation matrix to a txt file
-    # with open("correlation_matrix.txt", "w") as file:
-    #     for row in correlation_matrix:
-    #         row_str = "\t".join(map(str, row)) 
-    #         file.write(row_str + "\n") 
+        # Save the correlation matrix to a txt file
+    with open("correlation_matrix.txt", "w") as file:
+        for row in correlation_matrix:
+            row_str = "\t".join(map(str, row)) 
+            file.write(row_str + "\n") 
 
     print (f"*****mean_feature*****\n {mean_feature}")
     print(f"\n\n********** correlation_matrix***********\n {correlation_matrix}")
@@ -87,36 +87,39 @@ def find_correlation():
 #     return features
 import numpy as np
 
+# def select_least_k_features(correlation_matrix, k):
+#     num_features = len(correlation_matrix)
+#     selected_features = [] 
+
+#     # Sum of absolute correlations for each feature
+#     scores = np.sum(np.abs(correlation_matrix), axis=1)  
+
+#     for _ in range(k):
+#         best_feature = None
+#         best_score = float('inf')
+
+#         for feature in range(num_features):
+#             if feature not in selected_features and scores[feature] < best_score:
+#                 best_feature = feature
+#                 best_score = scores[feature]
+
+#         selected_features.append(best_feature)
+
+#         for feature in range(num_features):
+#             if feature not in selected_features: 
+#                 total_correlation = 0 
+#                 for selected in selected_features:
+#                     total_correlation += abs(correlation_matrix[feature][selected])
+#                 scores[feature] = total_correlation
+    # return selected_features
 def select_least_k_features(correlation_matrix, k):
-    num_features = len(correlation_matrix)
-    selected_features = [] 
-
-    # Sum of absolute correlations for each feature
-    scores = np.sum(np.abs(correlation_matrix), axis=1)  
-
-    for _ in range(k):
-        best_feature = None
-        best_score = float('inf')
-
-        for feature in range(num_features):
-            if feature not in selected_features and scores[feature] < best_score:
-                best_feature = feature
-                best_score = scores[feature]
-
-        selected_features.append(best_feature)
-
-        for feature in range(num_features):
-            if feature not in selected_features: 
-                total_correlation = 0 
-                for selected in selected_features:
-                    total_correlation += abs(correlation_matrix[feature][selected])
-                scores[feature] = total_correlation
-
-    print (selected_features)
-    return selected_features
-
+    variances = [np.var([float(row[i]) for row in data_array[1:]]) for i in range(len(data_array[0])-1)]
+    combined_scores = [np.sum(np.abs(correlation_matrix[i]))/variances[i] for i in range(len(correlation_matrix))]
+    
+    return np.argsort(combined_scores)[:k]
 
 selected_features = select_least_k_features(find_correlation(), 3)
+print (selected_features)
 
 # save selected features
 with open("selected_features.txt", "w") as f:
