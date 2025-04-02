@@ -1,0 +1,436 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{fullpage}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{xepersian}
+
+
+\newcommand{\StudentOne}{4011262134}
+\newcommand{\StudentTwo}{4011262098}
+\newcommand{\NameOne}{مینا جمشیدی}
+\newcommand{\NameTwo}{مبینا محمدی}
+\newcommand{\ProjectName}{مستندات پروژه clustering}
+
+
+\definecolor{CustomBackground}{HTML}{1C1C1C}
+\pagecolor{CustomBackground}
+\color{white}
+
+
+\settextfont{Vazir.ttf}[
+BoldFont = Vazir-Bold.ttf, 
+Path = fonts/]
+\setlatintextfont{Vazir.ttf}[
+BoldFont = Vazir-Bold.ttf, 
+Path = fonts/]
+
+
+\renewcommand{\baselinestretch}{1.2}
+\let\nobreaksection\section
+\renewcommand{\section}{\nobreaksection}  % اصلاح شده
+
+\begin{document}
+	
+
+	\hrule \medskip
+	\begin{minipage}{0.3\textwidth}
+		\raggedright
+		\small
+		\NameOne \\
+		\StudentOne \\
+		\NameTwo \\
+		\StudentTwo
+	\end{minipage}
+	\begin{minipage}{0.4\textwidth} 
+		\centering 
+		\large\bfseries
+		\ProjectName \\
+	\end{minipage}
+	\begin{minipage}{0.3\textwidth}
+		\raggedleft
+		\small
+	\end{minipage}
+	\medskip\hrule 
+	\vspace*{1.5cm}  
+	
+
+
+
+	\section{فاز اول: استخراج ویژگی}
+	\subsection{مقدمه}
+	در این فاز از پروژه، هدف پردازش تصاویر و استخراج ویژگی‌های مفید از آن‌ها می‌باشد. ویژگی‌های استخراج شده باید به گونه‌ای باشند که امکان تفکیک بهتر کلاس‌های مختلف را فراهم کنند.
+	
+	\subsection{ویژگی‌های استخراج شده}
+	در این پروژه، شش ویژگی مختلف از تصاویر استخراج شده است:
+	\begin{itemize}
+		\item \textbf{ویژگی‌های رنگی}: میانگین و انحراف معیار کانال‌های R، G و B
+		\item \textbf{ویژگی‌های آماری}: میانگین و واریانس تصویر خاکستری
+		\item \textbf{تراکم لبه‌ها}: با استفاده از فیلتر سوبل
+		\item \textbf{ویژگی‌های بافتی}: کنتراست و همگنی با استفاده از ماتریس هم‌رخساره خاکستری (GLCM)
+	\end{itemize}
+	
+	\subsection{توضیحات کد}
+	\subsubsection{تابع \lr{extract\_features}}
+	این تابع مسئول استخراج ویژگی‌ها از هر تصویر است:
+	\begin{latin}
+		\begin{verbatim}
+			def extract_features(image):
+			features = {}
+			
+			# تغییر اندازه تصویر به 128x128 پیکسل
+			image = cv2.resize(image, (128, 128))
+			
+			# ویژگی‌های رنگی
+			for i, color in enumerate(["R", "G", "B"]):
+			features[f"mean_{color}"] = np.mean(image[:, :, i])
+			features[f"std_{color}"] = np.std(image[:, :, i])
+			
+			# تبدیل به تصویر خاکستری
+			gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+			
+			# ویژگی‌های آماری
+			features["mean_gray"] = np.mean(gray)
+			features["var_gray"] = np.var(gray)
+			
+			# تراکم لبه‌ها با فیلتر سوبل
+			edges = sobel(gray)
+			features["edge_density"] = np.sum(edges) / (128 * 128)
+			
+			# ویژگی‌های بافتی با GLCM
+			glcm = graycomatrix(gray, [1], [0], symmetric=True, normed=True)
+			features["contrast"] = graycoprops(glcm, "contrast")[0, 0]
+			features["homogeneity"] = graycoprops(glcm, "homogeneity")[0, 0]
+			
+			return features
+		\end{verbatim}
+	\end{latin}
+	
+	\subsubsection{بخش اصلی کد}
+	این بخش تصاویر را از پوشه‌های مختلف خوانده و ویژگی‌های آن‌ها را استخراج می‌کند:
+	\begin{latin}
+		\begin{verbatim}
+			data = []
+			for category in os.listdir(DATASET_PATH):
+			category_path = os.path.join(DATASET_PATH, category)
+			if not os.path.isdir(category_path):
+			continue
+			
+			for image_name in os.listdir(category_path):
+			image_path = os.path.join(category_path, image_name)
+			image = cv2.imread(image_path)
+			if image is None:
+			continue
+			
+			features = extract_features(image)
+			features["label"] = category
+			data.append(features)
+			
+			df = pd.DataFrame(data)
+			df.to_csv("features.csv", index=False)
+		\end{verbatim}
+	\end{latin}
+	
+	\subsection{خروجی}
+	ویژگی‌های استخراج شده در یک فایل CSV با نام \lr{features.csv} ذخیره می‌شوند. هر سطر این فایل مربوط به یک تصویر و شامل ویژگی‌های استخراج شده و برچسب کلاس آن می‌باشد.
+	
+	\subsection{نتیجه‌گیری}
+	در این فاز، با موفقیت ویژگی‌های مختلفی از تصاویر استخراج شد که می‌تواند در مراحل بعدی برای طبقه‌بندی تصاویر مورد استفاده قرار گیرد. ویژگی‌های استخراج شده شامل ویژگی‌های رنگی، آماری، لبه‌ای و بافتی می‌باشند که همگی به صورت دستی پیاده‌سازی شده‌اند.
+	
+	\section{فاز دوم: انتخاب ویژگی‌ها}
+	
+	\subsection{اهداف اصلی}
+	\begin{itemize}
+		\item انتخاب حداقل 3 ویژگی بهینه از میان ویژگی‌های استخراج شده
+		\item محاسبه ماتریس همبستگی بین ویژگی‌ها
+		\item تعیین آستانه بهینه برای انتخاب ویژگی‌ها
+	\end{itemize}
+	
+	\subsection{بخش اصلی کد}
+\begin{latin}
+	\begin{verbatim}
+		# Calculate correlation matrix
+		def find_correlation():
+		# Compute correlations between features
+		correlation_matrix = np.zeros((n_features,n_features))
+		for i in range(n_features):
+		for j in range(i+1, n_features):
+		# Correlation calculation formula
+		corr = calculate_correlation(i,j)
+		correlation_matrix[i][j] = corr
+		correlation_matrix[j][i] = corr
+		return correlation_matrix
+		
+		# Select final features
+		def select_features(corr_matrix, k=3):
+		# Calculate combined score of correlation and variance
+		scores = [sum(abs(row))/variance for row,variance in zip(corr_matrix,variances)]
+		return np.argsort(scores)[:k]
+	\end{verbatim}
+\end{latin}
+	
+	\subsection{نکات کلیدی}
+	\begin{itemize}
+		\item ماتریس همبستگی به صورت دستی و بدون استفاده از کتابخانه‌های آماده محاسبه می‌شود
+		\item معیار انتخاب ویژگی‌ها ترکیبی از میزان همبستگی و واریانس است
+		\item تعداد ویژگی‌های انتخابی قابل تنظیم است (پیش‌فرض=3)
+	\end{itemize}
+	
+	\subsection{خروجی‌ها}
+	\begin{itemize}
+		\item ماتریس همبستگی در فایل \lr{correlation\_matrix.txt}
+		\item اندیس ویژگی‌های انتخابی در فایل \lr{selected\_features.txt}
+	\end{itemize}
+	
+	
+	\section{فاز سوم: خوشه‌بندی}
+	
+	\subsection{اهداف اصلی}
+	\begin{itemize}
+		\item پیاده‌سازی ۴ الگوریتم خوشه‌بندی مختلف
+		\item تنظیم پارامترهای هر الگوریتم
+		\item مقایسه عملکرد الگوریتم‌ها و انتخاب بهترین روش
+		\item تحلیل ویژگی‌های متمایزکننده هر خوشه
+	\end{itemize}
+	
+	\subsection{بخش اصلی کد}
+	\begin{latin}
+		\begin{verbatim}
+			# Initialize clustering algorithms
+			algorithms = {
+				'KMeans': KMeans(n_clusters=k, random_state=42),
+				'Agglomerative': AgglomerativeClustering(n_clusters=k),
+				'DBSCAN': DBSCAN(eps=0.3, min_samples=5),
+				'MeanShift': MeanShift(bandwidth=0.5)
+			}
+			
+			# Evaluate and compare algorithms
+			results = []
+			for name, algorithm in algorithms.items():
+			labels = algorithm.fit_predict(X_scaled)
+			score = silhouette_score(X_scaled, labels)
+			results.append({
+				'name': name,
+				'labels': labels,
+				'score': score,
+				'n_clusters': len(np.unique(labels))
+			})
+			
+			# Visualize cluster characteristics
+			cluster_means = df.groupby('cluster').mean()
+			sns.heatmap(cluster_means, annot=True, cmap="YlGnBu")
+			plt.savefig("cluster_heatmap.png")
+		\end{verbatim}
+	\end{latin}
+	
+	\subsection{نکات کلیدی}
+	\begin{itemize}
+		\item از معیار \lr{Silhouette Score} برای ارزیابی کیفیت خوشه‌بندی استفاده شده است
+		\item داده‌ها قبل از خوشه‌بندی نرمال شده‌اند
+		\item نتایج به صورت مصورسازی‌های مختلف ذخیره می‌شوند
+		\item برای هر الگوریتم پارامترهای بهینه انتخاب شده‌اند
+	\end{itemize}
+	
+	\subsection{خروجی‌ها}
+	\begin{itemize}
+		\item فایل \lr{clustered\_results.csv}: داده‌های خوشه‌بندی شده
+		\item تصاویر \lr{all\_clustering\_results.png} و \lr{best\_clustering\_result.png}: نتایج خوشه‌بندی
+		\item تصویر \lr{cluster\_heatmap.png}: ویژگی‌های متمایزکننده هر خوشه
+	\end{itemize}
+	
+	\section{فاز چهارم: مصورسازی نتایج}
+	
+	\subsection{اهداف اصلی}
+	\begin{itemize}
+		\item کاهش ابعاد داده‌ها برای نمایش بهتر
+		\item نمایش بصری نتایج خوشه‌بندی
+		\item مقایسه روش‌های مختلف کاهش ابعاد
+	\end{itemize}
+	
+	\subsection{بخش اصلی کد}
+	\begin{latin}
+		\begin{verbatim}
+			# PCA 2D Visualization
+			pca = PCA(n_components=2)
+			X_pca = pca.fit_transform(X)
+			plt.scatter(X_pca[:,0], X_pca[:,1], c=labels, cmap='viridis')
+			plt.title('PCA 2D Projection')
+			plt.savefig('pca_2d.png')
+			
+			# PCA 3D Visualization
+			pca_3d = PCA(n_components=3)
+			X_pca_3d = pca_3d.fit_transform(X)
+			fig = plt.figure()
+			ax = fig.add_subplot(111, projection='3d')
+			ax.scatter(X_pca_3d[:,0], X_pca_3d[:,1], X_pca_3d[:,2], c=labels)
+			plt.savefig('pca_3d.png')
+			
+			# t-SNE Visualization
+			tsne = TSNE(n_components=2, random_state=42)
+			X_tsne = tsne.fit_transform(X)
+			plt.scatter(X_tsne[:,0], X_tsne[:,1], c=labels, cmap='coolwarm')
+			plt.title('t-SNE Projection')
+			plt.savefig('tsne_2d.png')
+		\end{verbatim}
+	\end{latin}
+	
+	\subsection{نکات کلیدی}
+	\begin{itemize}
+		\item از دو روش کاهش ابعاد PCA و t-SNE استفاده شده است
+		\item نتایج هم در ۲ بعد و هم در ۳ بعد نمایش داده شده‌اند
+		\item رنگ‌های مختلف نشان‌دهنده خوشه‌های مختلف هستند
+		\item تصاویر با کیفیت بالا ذخیره می‌شوند
+	\end{itemize}
+	
+	\subsection{خروجی‌ها}
+	\begin{itemize}
+		\item \lr{pca\_2d.png}: نمایش دو بعدی با PCA
+		\item \lr{pca\_3d.png}: نمایش سه بعدی با PCA
+		\item \lr{tsne\_2d.png}: نمایش دو بعدی با t-SNE
+	\end{itemize}
+	
+	\subsection{تحلیل نتایج}
+	\begin{itemize}
+		\item PCA برای نمایش کلی ساختار داده مناسب است
+		\item t-SNE برای نمایش روابط غیرخطی و حفظ فاصله‌های محلی بهتر عمل می‌کند
+		\item نمایش سه بعدی می‌تواند بینش بهتری از توزیع داده‌ها ارائه دهد
+	\end{itemize}
+	
+	
+	\section{فاز پنجم: ارزیابی خوشه‌بندی}
+	
+	\subsection{معیارهای ارزیابی}
+	\begin{itemize}
+		\item \textbf{Silhouette Score}: ارزیابی کیفیت خوشه‌بندی بر اساس فاصله‌های درون‌خوشه‌ای و بین‌خوشه‌ای
+		\item \textbf{Precision}: خلوص هر خوشه (نسبت نمونه‌های متعلق به کلاس غالب)
+		\item \textbf{Recall}: میزان پوشش هر کلاس در خوشه‌ها
+		\item \textbf{F1-Score}: میانگین هارمونیک precision و recall
+	\end{itemize}
+	
+	\subsection{بخش اصلی کد}
+	\begin{latin}
+		\begin{verbatim}
+			def calculate_silhouette(X, labels):
+			# Calculate intra-cluster and nearest-cluster distances
+			a_i = np.mean([distance within cluster])
+			b_i = np.min([distance to other clusters])
+			return (b_i - a_i) / max(a_i, b_i)
+			
+			def calculate_precision_recall_f1(true_labels, pred_labels):
+			# Build confusion matrix
+			confusion_matrix = pd.crosstab(true_labels, pred_labels)
+			
+			# Precision = max class in cluster / cluster size
+			precision = {cluster: matrix[cluster].max()/sum(matrix[cluster]) 
+				for cluster in matrix.columns}
+			
+			# Recall = max cluster for class / class size
+			recall = {class: matrix.loc[class].max()/sum(matrix.loc[class]) 
+				for class in matrix.index}
+			
+			# F1 = 2 * (precision * recall) / (precision + recall)
+			return {
+				'precision': np.mean(precision.values()),
+				'recall': np.mean(recall.values()),
+				'f1_score': np.mean(f1_scores)
+			}
+		\end{verbatim}
+	\end{latin}
+	
+	\subsection{نکات کلیدی پیاده‌سازی}
+	\begin{itemize}
+		\item محاسبه \lr{Silhouette Score} به صورت دستی با فرمول اصلی
+		\item محاسبه معیارهای precision، recall و F1 بر اساس ماتریس درهم‌ریختگی
+		\item ذخیره نتایج ارزیابی در فایل خروجی
+		\item نمایش ماتریس درهم‌ریختگی برای تحلیل دقیق‌تر
+	\end{itemize}
+	
+	\subsection{خروجی‌ها}
+	\begin{itemize}
+		\item \lr{evaluation\_results.csv}: شامل مقادیر عددی معیارهای ارزیابی
+		
+	\end{itemize}
+	
+	\subsection{تحلیل نتایج}
+	\begin{itemize}
+		\item مقدار \lr{Silhouette Score} بین ۱- تا ۱ متغیر است که مقادیر بالاتر نشان‌دهنده کیفیت بهتر خوشه‌بندی است
+		\item مقادیر precision و recall بالای ۰.۸ نشان‌دهنده تطابق خوب خوشه‌ها با کلاس‌های واقعی است
+		\item F1-Score معیار متوازنی از دقت و بازیابی ارائه می‌دهد
+	\end{itemize}
+	
+	\section{فاز ششم: پیش‌بینی خوشه‌ها}
+	
+	\subsection{اهداف اصلی}
+	\begin{itemize}
+		\item پیش‌پردازش و نرمال‌سازی داده‌های تست
+		\item پیش‌بینی خوشه‌های داده‌های تست با استفاده از مدل KMeans آموزش‌دیده
+		\item مصورسازی نتایج برای ۱۰ نمونه تصادفی
+		\item ذخیره نتایج در قالب فایل CSV
+	\end{itemize}
+	
+	\subsection{مراحل اجرا}
+	
+	\subsubsection{بارگذاری مدل و داده‌ها}
+	\begin{latin}
+		\begin{verbatim}
+			# Load selected features and clustered results
+			selected_features = [int(line.strip()) for line in open("selected_features.txt")]
+			clustered_df = pd.read_csv("clustered_results.csv")
+			
+			# Load and preprocess training data for scaler
+			train_df = pd.read_csv("features.csv")
+			X_train = train_df.iloc[:, selected_features].values
+			scaler = StandardScaler().fit(X_train)
+		\end{verbatim}
+	\end{latin}
+	
+	\subsubsection{پیش‌بینی خوشه‌ها}
+	\begin{latin}
+		\begin{verbatim}
+			# Process test images and extract features
+			features_dict = extract_features(image)
+			X_test_selected = X_test[:, selected_features]
+			X_test_scaled = scaler.transform(X_test_selected)
+			
+			# Predict clusters
+			test_clusters = model.predict(X_test_scaled)
+		\end{verbatim}
+	\end{latin}
+	
+	\subsubsection{ذخیره نتایج}
+	\begin{latin}
+		\begin{verbatim}
+			results_df = pd.DataFrame({
+				'image_path': test_image_paths,
+				'true_class': test_classes,
+				'cluster': test_clusters
+			})
+			results_df.to_csv("test_predictions.csv", index=False)
+		\end{verbatim}
+	\end{latin}
+	
+	\subsection{مصورسازی نتایج}
+	\begin{itemize}
+		\item برای هر یک از ۱۰ نمونه تصادفی:
+		\begin{itemize}
+			\item نمایش تصویر تست
+			\item نمایش ۵ نمونه از خوشه مربوطه
+			\item عنوان‌بندی شامل کلاس واقعی و شماره خوشه
+		\end{itemize}
+		\item ذخیره خروجی در فایل \lr{test\_samples\_with\_cluster\_members.png}
+	\end{itemize}
+	
+	\subsection{خروجی‌ها}
+	\begin{itemize}
+		\item \lr{test\_predictions.csv}: شامل مسیر تصاویر، کلاس واقعی و خوشه پیش‌بینی شده
+		\item \lr{test\_samples\_with\_cluster\_members.png}: مصورسازی نتایج
+	\end{itemize}
+	
+	\subsection{نکات پیاده‌سازی}
+	\begin{itemize}
+		\item استفاده از همان اسکیلر آموزش‌دیده در فازهای قبل
+		\item حفظ ترتیب ویژگی‌ها مطابق با داده‌های آموزش
+		\item نمایش نمونه‌های تصادفی برای بررسی کیفیت خوشه‌بندی
+		\item قابلیت کار با انواع مدل‌های خوشه‌بندی
+	\end{itemize}
+\end{document}

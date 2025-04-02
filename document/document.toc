@@ -1,0 +1,17 @@
+\contentsline {section}{\numberline {1}فاز اول: استخراج ویژگی}{2}{}%
+\contentsline {subsection}{\numberline {1.1}اهداف}{2}{}%
+\contentsline {subsection}{\numberline {1.2}ویژگی‌های استخراج شده}{2}{}%
+\contentsline {subsection}{\numberline {1.3}پیاده‌سازی}{2}{}%
+\contentsline {subsection}{\numberline {1.4}نتایج}{3}{}%
+\contentsline {section}{\numberline {2}فاز دوم: انتخاب ویژگی‌ها}{3}{}%
+\contentsline {subsection}{\numberline {2.1}روش کار}{3}{}%
+\contentsline {subsection}{\numberline {2.2}خروجی‌ها}{4}{}%
+\contentsline {section}{\numberline {3}فاز سوم: خوشه‌بندی}{4}{}%
+\contentsline {subsection}{\numberline {3.1}الگوریتم‌های استفاده شده}{4}{}%
+\contentsline {subsection}{\numberline {3.2}ارزیابی}{4}{}%
+\contentsline {section}{\numberline {4}فاز چهارم: مصورسازی}{4}{}%
+\contentsline {subsection}{\numberline {4.1}نمونه نتایج}{4}{}%
+\contentsline {section}{\numberline {5}فاز پنجم: ارزیابی}{5}{}%
+\contentsline {subsection}{\numberline {5.1}معیارهای سنجش}{5}{}%
+\contentsline {section}{\numberline {6}فاز ششم: پیش‌بینی}{5}{}%
+\contentsline {subsection}{\numberline {6.1}نمونه خروجی}{5}{}%
