@@ -17,7 +17,7 @@ def find_correlation():
     # print (len(data_array))
     # print(len(data_array[0]))
 
-    #save mean of each feature in mean_feature
+    #save mean of each feature
     for i in range(len(data_array[0])-1):
         mean = 0
         for j in range(1 , len(data_array)):
@@ -27,7 +27,7 @@ def find_correlation():
         
         mean_feature.append(mean / (len(data_array)-1))
 
-    
+
     correlation_matrix = np.zeros((len(data_array[0])-1,len(data_array[0])-1))
     for i in range(len(data_array[0])-1):
         for j in range(i+1 , len(data_array[0])-1):
@@ -49,7 +49,7 @@ def find_correlation():
             correlation_matrix[j][i] = correlation_matrix[i][j]
 
 
-        # Save the correlation matrix to a txt file
+    # Save the correlation matrix to a txt file
     with open("correlation_matrix.txt", "w") as file:
         for row in correlation_matrix:
             row_str = "\t".join(map(str, row)) 

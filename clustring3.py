@@ -27,14 +27,14 @@ def evaluate_clustering(X, labels):
         return silhouette_score(X, labels)
     return -1
 
-k = 6  # Number of clusters for parametric algorithms
+k = 6  # Number of clusters
 
 # Define clustering algorithms
 algorithms = {
     'KMeans': KMeans(n_clusters=k, random_state=42),
     'Agglomerative': AgglomerativeClustering(n_clusters=k),
-    'DBSCAN': DBSCAN(eps=0.3, min_samples=5),
-    'MeanShift': MeanShift(bandwidth=0.5)
+    'DBSCAN': DBSCAN(eps=0.25, min_samples=5),
+    'MeanShift': MeanShift(bandwidth=0.9)
 }
 
 # Run all clustering algorithms
@@ -49,6 +49,10 @@ for name, algorithm in algorithms.items():
         'score': score,
         'n_clusters': n_clusters
     })
+
+#test
+#print result
+# print(results)
 
 # Find best algorithm
 best_result = max(results, key=lambda x: x['score'])
@@ -96,6 +100,12 @@ plt.show()
 # Save results
 df.to_csv("clustered_results.csv", index=False)
 
+best_algorithm_name = best_result['name']
+
+file_name = "best_algorithm.txt"
+with open(file_name, "w") as file:
+    file.write(best_algorithm_name)
+
 # Print summary
 print("\nClustering Algorithm Comparison:")
 print(pd.DataFrame({
@@ -107,8 +117,3 @@ print(pd.DataFrame({
 print(f"\nBest Algorithm: {best_result['name']}")
 print(f"Silhouette Score: {best_result['score']:.3f}")
 print(f"Number of Clusters: {best_result['n_clusters']}")
-print("\nResults saved to:")
-print("- clustered_results.csv")
-print("- all_clustering_results.png")
-print("- best_clustering_result.png")
-print("- cluster_characteristics.png")

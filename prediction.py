@@ -17,7 +17,14 @@ def main():
         
         #clustered results to get feature order
         clustered_df = pd.read_csv("clustered_results.csv")
-        best_algorithm_name = clustered_df.attrs.get('best_algorithm', 'KMeans')
+        # best_algorithm_name = clustered_df.attrs.get('best_algorithm', 'KMeans')
+        # Read the value from the file
+        with open("best_algorithm.txt", "r") as file:
+            best_algorithm_name = file.read().strip()
+
+        
+        # best_algorithm_name = clustered_df.attrs.get('best_algorithm', {best_algorithm_name})
+
         print(f"Best algorithm from clustering phase: {best_algorithm_name}")
         
         #original training features for scaler fitting
@@ -37,9 +44,9 @@ def main():
     elif best_algorithm_name == 'Agglomerative':
         model = AgglomerativeClustering(n_clusters=6)
     elif best_algorithm_name == 'DBSCAN':
-        model = DBSCAN(eps=0.3, min_samples=5)
+        model = DBSCAN(eps=0.25, min_samples=5)
     elif best_algorithm_name == 'MeanShift':
-        model = MeanShift(bandwidth=0.5)
+        model = MeanShift(bandwidth=1)
     else:
         print(f"Unknown algorithm: {best_algorithm_name}. Using KMeans as fallback.")
         model = KMeans(n_clusters=6, random_state=42)
