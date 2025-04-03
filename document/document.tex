@@ -55,87 +55,84 @@ Path = fonts/]
 	\vspace*{1.5cm}  
 	
 
+\section{فاز اول: استخراج ویژگی‌ها}
 
+\subsection*{\textbf{اهداف اصلی}}
+هدف از این فاز، پردازش تصاویر طبیعت و استخراج ویژگی‌های کلیدی برای خوشه‌بندی بود. ویژگی‌های استخراج شده باید بتوانند تفاوت بین انواع مختلف تصاویر طبیعی را به خوبی نشان دهند.
 
-	\section{فاز اول: استخراج ویژگی}
-	\subsection{مقدمه}
-	در این فاز از پروژه، هدف پردازش تصاویر و استخراج ویژگی‌های مفید از آن‌ها می‌باشد. ویژگی‌های استخراج شده باید به گونه‌ای باشند که امکان تفکیک بهتر کلاس‌های مختلف را فراهم کنند.
+\subsection*{\textbf{چالش‌ها و راهکارها}}
+
+\textbf{یکسان‌سازی اندازه تصاویر:}\\
+تصاویر ورودی با اندازه‌های مختلف وارد می‌شدند. برای حل این مشکل، همه تصاویر به اندازه استاندارد 128×128 پیکسل تغییر اندازه داده شدند. این اندازه به دلیلی انتخاب شد که هم جزئیات کافی حفظ شود و هم محاسبات بهینه باشد.
+\\
+\\
+\textbf{انتخاب ویژگی‌های معنادار:}\\
+ویژگی‌های انتخاب شده باید تفاوت بین کلاس‌ها را به خوبی نشان می‌دادند. برای این منظور از ترکیب چند نوع ویژگی استفاده شد.
+\\
+\\
+\textbf{محاسبه کارآمد ویژگی‌ها:}\\
+برای پردازش 3600 تصویر، از توابع بهینه‌شده کتابخانه‌های OpenCV و scikit-image استفاده شد تا محاسبات سریعتر انجام شود.
+
+\subsection*{\textbf{ویژگی‌های استخراج شده}}
+
+\textbf{ویژگی‌های رنگی:}\\
+- میانگین کانال‌های R، G، B  
+\\
+- انحراف معیار کانال‌های رنگی  
+\\
+این ویژگی‌ها تفاوت رنگ بین مناطق مختلف مثل دریا و جنگل را نشان می‌دهند.
+\\
+\\
+\textbf{ویژگی‌های آماری:}\\
+- میانگین سطح خاکستری  
+\\
+- واریانس سطح خاکستری  
+\\
+این موارد روشنایی و کنتراست کلی تصویر را اندازه می‌گیرند.
+\\
+\\
+\textbf{ویژگی‌های لبه‌ای:}\\
+- تراکم لبه‌ها با فیلتر سوبل  
+\\
+برای تشخیص مرزهای واضح مثل خط ساحلی مفید است.
+\\
+\\
+\textbf{ویژگی‌های بافتی:}\\
+- کنتراست GLCM  
+\\
+- همگنی GLCM  
+\\
+این ویژگی‌ها تفاوت بین مناطق یکنواخت و پرجزئیات را نشان می‌دهند.
+
+\subsection*{\textbf{مثال}}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\textwidth]{image1.png}
+	\caption{(A) تصویر نمونه, (B) تراکم لبه ها }
+	\label{fig:results}
+\end{figure}
+
+\subsection*{\textbf{نتایج و خروجی‌ها}}
+تمامی ویژگی‌های استخراج شده در فایل features.csv ذخیره شدند.
+\\
+- 11 ویژگی عددی برای هر تصویر
+\\
+- برچسب کلاس مربوطه
+\\
+- امکان استفاده در مراحل بعدی
+
+\subsection*{\textbf{جمع‌بندی}}
+ویژگی‌های انتخاب شده:
+\\
+- تفاوت بین کلاس‌های مختلف طبیعت را نشان دهند
+\\
+- نسبت به تغییرات جزئی در تصاویر حساس نباشند
+\\
+- خوب برای مراحل بعدی خوشه‌بندی 
+\\
+این ویژگی‌ها امکان تفکیک صحیح تصاویر طبیعی را فراهم می‌کنند.
 	
-	\subsection{ویژگی‌های استخراج شده}
-	در این پروژه، شش ویژگی مختلف از تصاویر استخراج شده است:
-	\begin{itemize}
-		\item \textbf{ویژگی‌های رنگی}: میانگین و انحراف معیار کانال‌های R، G و B
-		\item \textbf{ویژگی‌های آماری}: میانگین و واریانس تصویر خاکستری
-		\item \textbf{تراکم لبه‌ها}: با استفاده از فیلتر سوبل
-		\item \textbf{ویژگی‌های بافتی}: کنتراست و همگنی با استفاده از ماتریس هم‌رخساره خاکستری (GLCM)
-	\end{itemize}
-	
-	\subsection{توضیحات کد}
-	\subsubsection{تابع \lr{extract\_features}}
-	این تابع مسئول استخراج ویژگی‌ها از هر تصویر است:
-	\begin{latin}
-		\begin{verbatim}
-			def extract_features(image):
-			features = {}
-			
-			# تغییر اندازه تصویر به 128x128 پیکسل
-			image = cv2.resize(image, (128, 128))
-			
-			# ویژگی‌های رنگی
-			for i, color in enumerate(["R", "G", "B"]):
-			features[f"mean_{color}"] = np.mean(image[:, :, i])
-			features[f"std_{color}"] = np.std(image[:, :, i])
-			
-			# تبدیل به تصویر خاکستری
-			gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-			
-			# ویژگی‌های آماری
-			features["mean_gray"] = np.mean(gray)
-			features["var_gray"] = np.var(gray)
-			
-			# تراکم لبه‌ها با فیلتر سوبل
-			edges = sobel(gray)
-			features["edge_density"] = np.sum(edges) / (128 * 128)
-			
-			# ویژگی‌های بافتی با GLCM
-			glcm = graycomatrix(gray, [1], [0], symmetric=True, normed=True)
-			features["contrast"] = graycoprops(glcm, "contrast")[0, 0]
-			features["homogeneity"] = graycoprops(glcm, "homogeneity")[0, 0]
-			
-			return features
-		\end{verbatim}
-	\end{latin}
-	
-	\subsubsection{بخش اصلی کد}
-	این بخش تصاویر را از پوشه‌های مختلف خوانده و ویژگی‌های آن‌ها را استخراج می‌کند:
-	\begin{latin}
-		\begin{verbatim}
-			data = []
-			for category in os.listdir(DATASET_PATH):
-			category_path = os.path.join(DATASET_PATH, category)
-			if not os.path.isdir(category_path):
-			continue
-			
-			for image_name in os.listdir(category_path):
-			image_path = os.path.join(category_path, image_name)
-			image = cv2.imread(image_path)
-			if image is None:
-			continue
-			
-			features = extract_features(image)
-			features["label"] = category
-			data.append(features)
-			
-			df = pd.DataFrame(data)
-			df.to_csv("features.csv", index=False)
-		\end{verbatim}
-	\end{latin}
-	
-	\subsection{خروجی}
-	ویژگی‌های استخراج شده در یک فایل CSV با نام \lr{features.csv} ذخیره می‌شوند. هر سطر این فایل مربوط به یک تصویر و شامل ویژگی‌های استخراج شده و برچسب کلاس آن می‌باشد.
-	
-	\subsection{نتیجه‌گیری}
-	در این فاز، با موفقیت ویژگی‌های مختلفی از تصاویر استخراج شد که می‌تواند در مراحل بعدی برای طبقه‌بندی تصاویر مورد استفاده قرار گیرد. ویژگی‌های استخراج شده شامل ویژگی‌های رنگی، آماری، لبه‌ای و بافتی می‌باشند که همگی به صورت دستی پیاده‌سازی شده‌اند.
 	
 	\section{فاز دوم: انتخاب ویژگی‌ها}
 	
@@ -299,64 +296,75 @@ Path = fonts/]
 	
 	\section{فاز پنجم: ارزیابی خوشه‌بندی}
 	
-	\subsection{معیارهای ارزیابی}
-	\begin{itemize}
-		\item \textbf{Silhouette Score}: ارزیابی کیفیت خوشه‌بندی بر اساس فاصله‌های درون‌خوشه‌ای و بین‌خوشه‌ای
-		\item \textbf{Precision}: خلوص هر خوشه (نسبت نمونه‌های متعلق به کلاس غالب)
-		\item \textbf{Recall}: میزان پوشش هر کلاس در خوشه‌ها
-		\item \textbf{F1-Score}: میانگین هارمونیک precision و recall
-	\end{itemize}
+	\subsection*{\textbf{اهداف اصلی}}
+	در این فاز، عملکرد الگوریتم‌های خوشه‌بندی با معیارهای مختلف ارزیابی شد. هدف اصلی سنجش کیفیت خوشه‌بندی انجام شده و تحلیل نتایج بود.
+	\subsection*{\textbf{نتایج اجرای برنامه}}
+	خروجی کنسول پس از اجرای کد:
 	
-	\subsection{بخش اصلی کد}
 	\begin{latin}
 		\begin{verbatim}
-			def calculate_silhouette(X, labels):
-			# Calculate intra-cluster and nearest-cluster distances
-			a_i = np.mean([distance within cluster])
-			b_i = np.min([distance to other clusters])
-			return (b_i - a_i) / max(a_i, b_i)
+			Clustering Evaluation Results:
+			Average Precision: 0.5878
+			Average Recall: 0.6033
+			Average F1-Score: 0.5964
+			Silhouette Score: 0.1472
 			
-			def calculate_precision_recall_f1(true_labels, pred_labels):
-			# Build confusion matrix
-			confusion_matrix = pd.crosstab(true_labels, pred_labels)
+			Confusion Matrix:
+			Predicted 0 1 2 3 4 5
+			Actual
+			beach 21 18 82 0 291 188
+			dense_residential 0 318 124 132 24 2
+			desert 509 1 8 1 80 1
+			forest 0 56 542 0 2 0
+			intersection 0 283 47 67 168 35
+			sea_ice 5 47 222 1 229 96
 			
-			# Precision = max class in cluster / cluster size
-			precision = {cluster: matrix[cluster].max()/sum(matrix[cluster]) 
-				for cluster in matrix.columns}
-			
-			# Recall = max cluster for class / class size
-			recall = {class: matrix.loc[class].max()/sum(matrix.loc[class]) 
-				for class in matrix.index}
-			
-			# F1 = 2 * (precision * recall) / (precision + recall)
-			return {
-				'precision': np.mean(precision.values()),
-				'recall': np.mean(recall.values()),
-				'f1_score': np.mean(f1_scores)
-			}
+			Results saved to evaluation_results.csv
 		\end{verbatim}
 	\end{latin}
+	\subsection*{\textbf{معیارهای ارزیابی}}
 	
-	\subsection{نکات کلیدی پیاده‌سازی}
-	\begin{itemize}
-		\item محاسبه \lr{Silhouette Score} به صورت دستی با فرمول اصلی
-		\item محاسبه معیارهای precision، recall و F1 بر اساس ماتریس درهم‌ریختگی
-		\item ذخیره نتایج ارزیابی در فایل خروجی
-		\item نمایش ماتریس درهم‌ریختگی برای تحلیل دقیق‌تر
-	\end{itemize}
+	\textbf{ Silhouette:}
+	\\
+	این معیار با مقدار 0.1472 نشان می‌دهد که ساختار خوشه‌بندی تا حدی مناسب است، ولی فضای بهینه‌ای بین خوشه‌ها وجود ندارد. این مقدار نشان می‌دهد که برخی نمونه‌ها نزدیک به مرز خوشه‌ها قرار گرفته‌اند.
+	\\
+	\textbf{ Precision:}
+	\\
+	با مقدار متوسط 0.5878 نشان می‌دهد که به طور متوسط حدود 58\% از نمونه‌های هر خوشه متعلق به کلاس غالب هستند. این نشان می‌دهد خوشه‌ها تا حدی خالص هستند.
+	\\
+	\textbf{Recall:}
+	\\
+	مقدار 0.6033 نشان می‌دهد که حدود 60\% از نمونه‌های هر کلاس در خوشه مربوطه قرار گرفته‌اند.
+	\\
+	\textbf{F1-Score:}
+	\\
+	با مقدار 0.5964 نشان می‌دهد که توازن نسبتاً خوبی بین دقت و فراخوانی وجود دارد.
 	
-	\subsection{خروجی‌ها}
-	\begin{itemize}
-		\item \lr{evaluation\_results.csv}: شامل مقادیر عددی معیارهای ارزیابی
-		
-	\end{itemize}
+	\subsection*{\textbf{تحلیل ماتریس درهم‌ریختگی}}
+	- کلاس desert بهترین عملکرد را با 509 نمونه در خوشه صحیح دارد
+	\\
+	- کلاس beach و sea ice بیشترین اختلاط را نشان می‌دهند
+	\\
+	- برخی خوشه‌ها (مانند خوشه 3) نمونه‌های کمی دارند
+
 	
-	\subsection{تحلیل نتایج}
-	\begin{itemize}
-		\item مقدار \lr{Silhouette Score} بین ۱- تا ۱ متغیر است که مقادیر بالاتر نشان‌دهنده کیفیت بهتر خوشه‌بندی است
-		\item مقادیر precision و recall بالای ۰.۸ نشان‌دهنده تطابق خوب خوشه‌ها با کلاس‌های واقعی است
-		\item F1-Score معیار متوازنی از دقت و بازیابی ارائه می‌دهد
-	\end{itemize}
+	\subsection*{\textbf{تفاوت معیارها}}
+	تفاوت بین مقادیر معیارها به دلایل زیر است:
+	\\
+	- Silhouette بر اساس فاصله‌های هندسی است
+	\\
+	- Precision/Recall بر اساس تطابق با برچسب‌های واقعی است
+	\\
+	- برخی مناطق طبیعی (مثل ساحل و یخ دریا) ویژگی‌های مشابهی دارند
+	
+	\subsection*{\textbf{جمع‌بندی}}
+	نتایج الگوریتم خوشه‌بندی:
+	\\
+	- برای برخی کلاس‌ها (مانند بیابان) عملکرد خوبی دارد
+	\\
+	- برای کلاس‌های با ویژگی‌های مشابه نیاز به بهبود دارد
+	\\
+	- به طور کلی ساختار معقولی ایجاد کرده اما جای پیشرفت وجود دارد
 	
 	\section{فاز ششم: پیش‌بینی خوشه‌ها}
 	

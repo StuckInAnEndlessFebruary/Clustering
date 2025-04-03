@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (MiKTeX 24.1) (preloaded format=xelatex 2024.3.6)  2 APR 2025 14:08
+This is XeTeX, Version 3.141592653-2.6-0.999995 (MiKTeX 24.1) (preloaded format=xelatex 2024.3.6)  3 APR 2025 11:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -584,130 +584,43 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 44.
 (C:\Users\HP\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Missing character: There is no ت in font [lmmono12-regular]:!
-Missing character: There is no غ in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no ر in font [lmmono12-regular]:!
-Missing character: There is no ا in font [lmmono12-regular]:!
-Missing character: There is no ن in font [lmmono12-regular]:!
-Missing character: There is no د in font [lmmono12-regular]:!
-Missing character: There is no ا in font [lmmono12-regular]:!
-Missing character: There is no ز in font [lmmono12-regular]:!
-Missing character: There is no ه in font [lmmono12-regular]:!
-Missing character: There is no ت in font [lmmono12-regular]:!
-Missing character: There is no ص in font [lmmono12-regular]:!
-Missing character: There is no و in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no ر in font [lmmono12-regular]:!
-Missing character: There is no ب in font [lmmono12-regular]:!
-Missing character: There is no ه in font [lmmono12-regular]:!
-Missing character: There is no پ in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no ک in font [lmmono12-regular]:!
-Missing character: There is no س in font [lmmono12-regular]:!
-Missing character: There is no ل in font [lmmono12-regular]:!
-Missing character: There is no و in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no ژ in font [lmmono12-regular]:!
-Missing character: There is no گ in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no ‌ in font [lmmono12-regular]:!
-Missing character: There is no ه in font [lmmono12-regular]:!
-Missing character: There is no ا in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no ر in font [lmmono12-regular]:!
-Missing character: There is no ن in font [lmmono12-regular]:!
-Missing character: There is no گ in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
+Underfull \hbox (badness 10000) in paragraph at lines 65--75
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 65--75
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--106
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--106
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--106
+[][]
+ []
+
 [1
 
 ]
-Missing character: There is no ت in font [lmmono12-regular]:!
-Missing character: There is no ب in font [lmmono12-regular]:!
-Missing character: There is no د in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no ل in font [lmmono12-regular]:!
-Missing character: There is no ب in font [lmmono12-regular]:!
-Missing character: There is no ه in font [lmmono12-regular]:!
-Missing character: There is no ت in font [lmmono12-regular]:!
-Missing character: There is no ص in font [lmmono12-regular]:!
-Missing character: There is no و in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no ر in font [lmmono12-regular]:!
-Missing character: There is no خ in font [lmmono12-regular]:!
-Missing character: There is no ا in font [lmmono12-regular]:!
-Missing character: There is no ک in font [lmmono12-regular]:!
-Missing character: There is no س in font [lmmono12-regular]:!
-Missing character: There is no ت in font [lmmono12-regular]:!
-Missing character: There is no ر in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no و in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no ژ in font [lmmono12-regular]:!
-Missing character: There is no گ in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no ‌ in font [lmmono12-regular]:!
-Missing character: There is no ه in font [lmmono12-regular]:!
-Missing character: There is no ا in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no آ in font [lmmono12-regular]:!
-Missing character: There is no م in font [lmmono12-regular]:!
-Missing character: There is no ا in font [lmmono12-regular]:!
-Missing character: There is no ر in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no ت in font [lmmono12-regular]:!
-Missing character: There is no ر in font [lmmono12-regular]:!
-Missing character: There is no ا in font [lmmono12-regular]:!
-Missing character: There is no ک in font [lmmono12-regular]:!
-Missing character: There is no م in font [lmmono12-regular]:!
-Missing character: There is no ل in font [lmmono12-regular]:!
-Missing character: There is no ب in font [lmmono12-regular]:!
-Missing character: There is no ه in font [lmmono12-regular]:!
-Missing character: There is no ‌ in font [lmmono12-regular]:!
-Missing character: There is no ه in font [lmmono12-regular]:!
-Missing character: There is no ا in font [lmmono12-regular]:!
-Missing character: There is no ب in font [lmmono12-regular]:!
-Missing character: There is no ا in font [lmmono12-regular]:!
-Missing character: There is no ف in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no ل in font [lmmono12-regular]:!
-Missing character: There is no ت in font [lmmono12-regular]:!
-Missing character: There is no ر in font [lmmono12-regular]:!
-Missing character: There is no س in font [lmmono12-regular]:!
-Missing character: There is no و in font [lmmono12-regular]:!
-Missing character: There is no ب in font [lmmono12-regular]:!
-Missing character: There is no ل in font [lmmono12-regular]:!
-Missing character: There is no و in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no ژ in font [lmmono12-regular]:!
-Missing character: There is no گ in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no ‌ in font [lmmono12-regular]:!
-Missing character: There is no ه in font [lmmono12-regular]:!
-Missing character: There is no ا in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no ب in font [lmmono12-regular]:!
-Missing character: There is no ا in font [lmmono12-regular]:!
-Missing character: There is no ف in font [lmmono12-regular]:!
-Missing character: There is no ت in font [lmmono12-regular]:!
-Missing character: There is no ی in font [lmmono12-regular]:!
-Missing character: There is no ب in font [lmmono12-regular]:!
-Missing character: There is no ا in font [lmmono12-regular]:!
-[2] [3]
-Overfull \hbox (53.79205pt too wide) in paragraph at lines 169--169
+File: image1.png Graphic file (type bmp)
+<image1.png>
+ [2]
+Overfull \hbox (53.79205pt too wide) in paragraph at lines 166--166
 [][]  \TU/lmtt/m/n/12 scores = [sum(abs(row))/variance for row,variance in zip(
 corr_matrix,variances)][] []
  []
 
-[4] [5] [6]
-Overfull \hbox (12.43445pt too wide) in paragraph at lines 304--305
-[][]\TU/Vazir.ttf(0)/b/n/12 Silhouette Score\TU/Vazir.ttf(0)/m/n/12 : ارزیابی ک
-یفیت خوشه‌بندی بر اساس فاصله‌های درون‌خوشه‌ای و بین‌خوشه‌ای []
- []
-
-[7] [8]
-Overfull \hbox (66.15204pt too wide) in paragraph at lines 384--384
+[3] [4] [5] [6] [7] [8]
+Overfull \hbox (66.15204pt too wide) in paragraph at lines 392--392
 [][]   \TU/lmtt/m/n/12 selected_features = [int(line.strip()) for line in open(
 "selected_features.txt")][] []
  []
@@ -719,11 +632,11 @@ L3 programming layer <2024-01-04>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 7950 strings out of 409617
- 181282 string characters out of 5774623
+ 7962 strings out of 409617
+ 181412 string characters out of 5774623
  1927191 words of memory out of 5000000
- 29887 multiletter control sequences out of 15000+600000
- 562914 words of font info for 79 fonts, out of 8000000 for 9000
+ 29898 multiletter control sequences out of 15000+600000
+ 562906 words of font info for 78 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  94i,5n,107p,1021b,349s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
