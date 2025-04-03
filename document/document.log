@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (MiKTeX 24.1) (preloaded format=xelatex 2024.3.6)  3 APR 2025 11:45
+This is XeTeX, Version 3.141592653-2.6-0.999995 (MiKTeX 24.1) (preloaded format=xelatex 2024.3.6)  3 APR 2025 14:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -619,11 +619,17 @@ Overfull \hbox (53.79205pt too wide) in paragraph at lines 166--166
 corr_matrix,variances)][] []
  []
 
-[3] [4] [5] [6] [7] [8]
-Overfull \hbox (66.15204pt too wide) in paragraph at lines 392--392
-[][]   \TU/lmtt/m/n/12 selected_features = [int(line.strip()) for line in open(
-"selected_features.txt")][] []
+[3] [4] [5] [6] [7]
+Underfull \hbox (badness 10000) in paragraph at lines 374--388
+[][]
  []
+
+[8]
+File: test_samples_with_cluster_members.png Graphic file (type bmp)
+<test_samples_with_cluster_members.png>
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
 
 [9] [10] (document.aux)
  ***********
@@ -632,12 +638,12 @@ L3 programming layer <2024-01-04>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 7962 strings out of 409617
- 181412 string characters out of 5774623
+ 7971 strings out of 409617
+ 181793 string characters out of 5774623
  1927191 words of memory out of 5000000
- 29898 multiletter control sequences out of 15000+600000
+ 29906 multiletter control sequences out of 15000+600000
  562906 words of font info for 78 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 94i,5n,107p,1021b,349s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 94i,5n,107p,1021b,347s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on document.pdf (10 pages).

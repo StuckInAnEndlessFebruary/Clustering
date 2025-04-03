@@ -28,7 +28,7 @@ Path = fonts/]
 
 \renewcommand{\baselinestretch}{1.2}
 \let\nobreaksection\section
-\renewcommand{\section}{\nobreaksection}  % اصلاح شده
+\renewcommand{\section}{\nobreaksection} 
 
 \begin{document}
 	
@@ -366,79 +366,46 @@ Path = fonts/]
 	\\
 	- به طور کلی ساختار معقولی ایجاد کرده اما جای پیشرفت وجود دارد
 	
-	\section{فاز ششم: پیش‌بینی خوشه‌ها}
 	
-	\subsection{اهداف اصلی}
-	\begin{itemize}
-		\item پیش‌پردازش و نرمال‌سازی داده‌های تست
-		\item پیش‌بینی خوشه‌های داده‌های تست با استفاده از مدل KMeans آموزش‌دیده
-		\item مصورسازی نتایج برای ۱۰ نمونه تصادفی
-		\item ذخیره نتایج در قالب فایل CSV
-	\end{itemize}
 	
-	\subsection{مراحل اجرا}
+	\section{فاز ششم: پیش‌بینی و تحلیل خوشه‌ها}
 	
-	\subsubsection{بارگذاری مدل و داده‌ها}
+	\subsection*{\textbf{اهداف }}
+	هدف اصلی این فاز، اعمال مدل آموزش‌دیده KMeans بر روی داده‌های تست و تحلیل نتایج بود. چالش ها:
+	\\
+	1. \textbf{یکسان‌سازی فرآیند پیش‌پردازش}:
+	\\
+	- استفاده از تابع extractfeatures یکسان برای تست و آموزش
+	\\
+	- اعمال نرمال‌سازی با اسکیلر آموزش‌دیده
+	\\
+	\\
+	2. \textbf{نمایش معنادار نتایج}:
+	\\
+	- انتخاب تصادفی 10 نمونه تست با ثابت کردن seed
+	\\
+	- نمایش 5 نمونه از هر خوشه برای تحلیل بصری
+	
+	
+	\subsection*{\textbf{نتایج اجرا}}
 	\begin{latin}
 		\begin{verbatim}
-			# Load selected features and clustered results
-			selected_features = [int(line.strip()) for line in open("selected_features.txt")]
-			clustered_df = pd.read_csv("clustered_results.csv")
-			
-			# Load and preprocess training data for scaler
-			train_df = pd.read_csv("features.csv")
-			X_train = train_df.iloc[:, selected_features].values
-			scaler = StandardScaler().fit(X_train)
+		Features saved successfully.
+		Loaded 3 selected features
+		Processing test images...
+		Predicted clusters for 600 test images
+		Saved predictions to test_predictions.csv
+		Saved visualization to test_samples_with_cluster_members.png
 		\end{verbatim}
 	\end{latin}
+		\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.8\textwidth]{test_samples_with_cluster_members.png}
+		\caption{نمونه‌های تست و اعضای خوشه‌های مربوطه}
+	\end{figure}
 	
-	\subsubsection{پیش‌بینی خوشه‌ها}
-	\begin{latin}
-		\begin{verbatim}
-			# Process test images and extract features
-			features_dict = extract_features(image)
-			X_test_selected = X_test[:, selected_features]
-			X_test_scaled = scaler.transform(X_test_selected)
-			
-			# Predict clusters
-			test_clusters = model.predict(X_test_scaled)
-		\end{verbatim}
-	\end{latin}
-	
-	\subsubsection{ذخیره نتایج}
-	\begin{latin}
-		\begin{verbatim}
-			results_df = pd.DataFrame({
-				'image_path': test_image_paths,
-				'true_class': test_classes,
-				'cluster': test_clusters
-			})
-			results_df.to_csv("test_predictions.csv", index=False)
-		\end{verbatim}
-	\end{latin}
-	
-	\subsection{مصورسازی نتایج}
-	\begin{itemize}
-		\item برای هر یک از ۱۰ نمونه تصادفی:
-		\begin{itemize}
-			\item نمایش تصویر تست
-			\item نمایش ۵ نمونه از خوشه مربوطه
-			\item عنوان‌بندی شامل کلاس واقعی و شماره خوشه
-		\end{itemize}
-		\item ذخیره خروجی در فایل \lr{test\_samples\_with\_cluster\_members.png}
-	\end{itemize}
-	
-	\subsection{خروجی‌ها}
-	\begin{itemize}
-		\item \lr{test\_predictions.csv}: شامل مسیر تصاویر، کلاس واقعی و خوشه پیش‌بینی شده
-		\item \lr{test\_samples\_with\_cluster\_members.png}: مصورسازی نتایج
-	\end{itemize}
-	
-	\subsection{نکات پیاده‌سازی}
-	\begin{itemize}
-		\item استفاده از همان اسکیلر آموزش‌دیده در فازهای قبل
-		\item حفظ ترتیب ویژگی‌ها مطابق با داده‌های آموزش
-		\item نمایش نمونه‌های تصادفی برای بررسی کیفیت خوشه‌بندی
-		\item قابلیت کار با انواع مدل‌های خوشه‌بندی
-	\end{itemize}
+	\subsection*{\textbf{خروجی‌ها}}
+	- فایل CSV پیش‌بینی‌ها و کلاس‌های واقعی
+	\\
+	- تصویر PNG نتایج مصورسازی
 \end{document}

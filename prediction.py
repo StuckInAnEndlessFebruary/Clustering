@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import KMeans, AgglomerativeClustering, DBSCAN, MeanShift
+from sklearn.cluster import KMeans
 from feature_extraction import extract_features
 
 def main():
@@ -14,18 +14,6 @@ def main():
         with open("selected_features.txt", "r") as f:
             selected_features = [int(line.strip()) for line in f]
         print(f"Loaded {len(selected_features)} selected features")
-        
-        #clustered results to get feature order
-        clustered_df = pd.read_csv("clustered_results.csv")
-        # best_algorithm_name = clustered_df.attrs.get('best_algorithm', 'KMeans')
-        # Read the value from the file
-        with open("best_algorithm.txt", "r") as file:
-            best_algorithm_name = file.read().strip()
-
-        
-        # best_algorithm_name = clustered_df.attrs.get('best_algorithm', {best_algorithm_name})
-
-        print(f"Best algorithm from clustering phase: {best_algorithm_name}")
         
         #original training features for scaler fitting
         train_df = pd.read_csv("features.csv")
@@ -38,22 +26,9 @@ def main():
     scaler = StandardScaler().fit(X_train)
     X_train_scaled = scaler.transform(X_train)
 
-    # Recreate the best clustering model
-    if best_algorithm_name == 'KMeans':
-        model = KMeans(n_clusters=6, random_state=42)
-    elif best_algorithm_name == 'Agglomerative':
-        model = AgglomerativeClustering(n_clusters=6)
-    elif best_algorithm_name == 'DBSCAN':
-        model = DBSCAN(eps=0.25, min_samples=5)
-    elif best_algorithm_name == 'MeanShift':
-        model = MeanShift(bandwidth=1)
-    else:
-        print(f"Unknown algorithm: {best_algorithm_name}. Using KMeans as fallback.")
-        model = KMeans(n_clusters=6, random_state=42)
-
-    # Fit model with training data (except for DBSCAN which doesn't need fitting)
-    if best_algorithm_name != 'DBSCAN':
-        model.fit(X_train_scaled)
+    # use KMeans
+    model = KMeans(n_clusters=6, random_state=42)
+    model.fit(X_train_scaled)
 
     # Process test data
     test_features = []
@@ -103,10 +78,7 @@ def main():
     X_test_scaled = scaler.transform(X_test_selected)
 
     # Predict clusters
-    if best_algorithm_name == 'Agglomerative' or best_algorithm_name == 'DBSCAN':
-        test_clusters = model.fit_predict(X_test_scaled)
-    else:
-        test_clusters = model.predict(X_test_scaled)
+    test_clusters = model.predict(X_test_scaled)
     
     print(f"Predicted clusters for {len(test_clusters)} test images")
 
