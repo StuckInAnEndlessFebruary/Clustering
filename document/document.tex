@@ -133,167 +133,121 @@ Path = fonts/]
 \\
 این ویژگی‌ها امکان تفکیک صحیح تصاویر طبیعی را فراهم می‌کنند.
 	
+\section{فاز دوم: انتخاب ویژگی‌ها}
+
+\subsection*{\textbf{اهداف}}
+هدف از فاز دوم انتخاب بهینه‌ترین ویژگی‌ها از میان 11 ویژگی استخراج شده بود. و به این منظور نیاز به ایجاد ماتریس همبستگی و تحلیل روابط بین ویژگی‌ها بود.
+
+\subsubsection*{\textbf{محاسبه ماتریس همبستگی}}
+ماتریس همبستگی به صورت دستی با استفاده از فرمول زیر محاسبه شد:
+\begin{equation}
+r_{xy} = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum (x_i - \bar{x})^2 \sum (y_i - \bar{y})^2}}
+\end{equation}
+برای اینکه میانگین ویژگی ها چندبار نیاز بود در ابتدا به صورت جدا حساب شد.
+
+\subsubsection*{\textbf{معیارهای انتخاب ویژگی}}
+بهترین ویژگی ها در این پروژه، ویژگی هایی هستند که کمترین همبستگی را دارند تا بتوانیم تصاویر را با معیار های متفاوت و دور از هم دسته بندی کنیم.
+برای پیدا کردن بهترین ویژگی ها ابتدا داده های ماتریس را مرتب کرده و کمترین آن هارا انتخاب کردیم ولی پی بردیم که این روش خوبی نیست چون ممکن چند داده که به هم شبیه هستن انتخاب شوند. بعد جمع این مقادیر را لحاظ کردیم که باز هم روش مناسبی نبود. و در آخر از واریانس کمک گرفتیم.
+\\
+تابع \lr{select\_least\_k\_features} به منظور انتخاب بهینه‌ترین ویژگی‌ها برای عملیات خوشه‌بندی طراحی شده است. این تابع با ترکیب دو معیار اساسی شامل \textbf{میزان همبستگی بین ویژگی‌ها} و \textbf{میزان اطلاعات هر ویژگی}، ویژگی‌های نهایی را انتخاب می‌نماید.
+\\
+فرمول اصلی مورد استفاده در این تابع به صورت زیر است:
+
+\begin{equation}
+\text{امتیاز ترکیبی} = \frac{\sum|\text{همبستگی‌های ویژگی }i|}{\text{واریانس ویژگی }i}
+\end{equation}
+\\
+این تابع در چهار گام اصلی عمل می‌کند:
+
+\begin{enumerate}
+\item محاسبه واریانس هر ویژگی به صورت جداگانه که نشان‌دهنده میزان پراکندگی و اطلاعات موجود در آن ویژگی است.
+
+\item محاسبه مجموع قدر مطلق مقادیر همبستگی هر ویژگی با سایر ویژگی‌ها از ماتریس همبستگی که بیانگر میزان وابستگی و افزونگی آن ویژگی است.
+
+\item محاسبه امتیاز ترکیبی برای هر ویژگی از طریق تقسیم مجموع همبستگی‌ها بر واریانس. این نسبت نشان می‌دهد که به ازای هر واحد اطلاعات، چه میزان افزونگی وجود دارد.
+
+\item انتخاب $k$ ویژگی با کمترین امتیاز ترکیبی که بیانگر ویژگی‌های با بیشترین اطلاعات و کمترین وابستگی به سایر ویژگی‌ها است.
+\end{enumerate}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{correlation_matrix.png}
+\caption{ماتریس همبستگی بین ویژگی‌ها}
+\end{figure}
+
+
+\section{فاز سوم: خوشه‌بندی}
+
+\subsection*{\textbf{اهداف اصلی}}
+\begin{itemize}
+	\item پیاده‌سازی ۴ الگوریتم خوشه‌بندی مختلف
+	\item تنظیم پارامترهای هر الگوریتم
+	\item مقایسه عملکرد الگوریتم‌ها و انتخاب بهترین روش
+	\item تحلیل ویژگی‌های متمایزکننده هر خوشه
+\end{itemize}
+در این فاز، پس از آماده‌سازی داده‌ها و نرمال‌سازی ویژگی‌های انتخاب شده، چهار الگوریتم خوشه‌بندی مختلف را پیاده‌سازی کردیم:
+
+\begin{itemize}
+\item \textbf{K-Means}: با تنظیم تعداد خوشه‌ها بر اساس دانش اولیه از دیتاست (۶ کلاس اصلی)
+\item \textbf{Agglomerative}: با استفاده از روش پیوند کامل
+\item \textbf{DBSCAN}: با پارامترهای بهینه‌شده برای شناسایی نواحی پرتراکم
+\item \textbf{MeanShift}: برای شناسایی خودکار تعداد خوشه‌ها
+\end{itemize}
+ برای مقایسه الگوریتم ها از معیار  سیلهوئت استفاده کردیم که هرچه بیشتر باشد بهتر است.
+\\
+در 2 الگوریتم اخر اپسیلون و bandwidth با آزمون خطا انتخاب شد؛ اینکه بتوانند تعداد کلاستر معقولی ایجاد کنند و سیلهوئت  بالاتری ایجاد شود.
+\\
+DBSCAN با بالا بردن اپسیلون تعداد خوشه های معقولی ایجاد میکرد ولی شاخص کیفیت کاهش پیدا میکرد و در نهایت منفی میشد.
+\\
+برای meanshift با تغییر bandwidth و نزدیک 1 قرار دادن تعداد دسته های خوبی و همچنین معیار سیلهوئت  بالایی می داد اما با ادامه ی مراحل متوجه شدیم که به درستی دسته بندی نمی کند.
+ \\
+و براساس معیار گفته شده الگوریتم kmeans را انتخاب کردیم
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{clustring_result.png}
+\caption{نتایج آماری خوشه بندی}
+\label{fig:clustering_results}
+\end{figure}
+
+\section{فاز چهارم: نمایش بصری نتایج الگوریتم ها}
+
+
+برای مصورسازی نتایج از کتابخانه‌های زیر استفاده شده است:
+\begin{itemize}
+\item \textbf{Matplotlib} (نسخه 3.5.1):
+\begin{itemize}
+\item کتابخانه پایه برای ایجاد انواع نمودارها و ویژوال‌سازی‌ها
+\item استفاده شده برای ایجاد نمودارهای پراکندگی و تنظیم جزئیات ظاهری
+\end{itemize}
+
+\item \textbf{Seaborn} (نسخه 0.11.2):
+\begin{itemize}
+\item کتابخانه سطح بالا مبتنی بر Matplotlib
+\item استفاده شده برای ایجاد هیت‌مپ و نمودارهای پراکندگی پیشرفته
+\item پالت رنگی \lr{viridis} برای نمایش بهتر خوشه‌ها
+\end{itemize}
+\end{itemize}
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{all_clustering_results.png}
+\caption{نتایج خوشه‌بندی تمام الگوریتم‌ها}
+\label{fig:clustering_results}
+\end{figure}
 	
-	\section{فاز دوم: انتخاب ویژگی‌ها}
-	
-	\subsection{اهداف اصلی}
-	\begin{itemize}
-		\item انتخاب حداقل 3 ویژگی بهینه از میان ویژگی‌های استخراج شده
-		\item محاسبه ماتریس همبستگی بین ویژگی‌ها
-		\item تعیین آستانه بهینه برای انتخاب ویژگی‌ها
-	\end{itemize}
-	
-	\subsection{بخش اصلی کد}
-\begin{latin}
-	\begin{verbatim}
-		# Calculate correlation matrix
-		def find_correlation():
-		# Compute correlations between features
-		correlation_matrix = np.zeros((n_features,n_features))
-		for i in range(n_features):
-		for j in range(i+1, n_features):
-		# Correlation calculation formula
-		corr = calculate_correlation(i,j)
-		correlation_matrix[i][j] = corr
-		correlation_matrix[j][i] = corr
-		return correlation_matrix
-		
-		# Select final features
-		def select_features(corr_matrix, k=3):
-		# Calculate combined score of correlation and variance
-		scores = [sum(abs(row))/variance for row,variance in zip(corr_matrix,variances)]
-		return np.argsort(scores)[:k]
-	\end{verbatim}
-\end{latin}
-	
-	\subsection{نکات کلیدی}
-	\begin{itemize}
-		\item ماتریس همبستگی به صورت دستی و بدون استفاده از کتابخانه‌های آماده محاسبه می‌شود
-		\item معیار انتخاب ویژگی‌ها ترکیبی از میزان همبستگی و واریانس است
-		\item تعداد ویژگی‌های انتخابی قابل تنظیم است (پیش‌فرض=3)
-	\end{itemize}
-	
-	\subsection{خروجی‌ها}
-	\begin{itemize}
-		\item ماتریس همبستگی در فایل \lr{correlation\_matrix.txt}
-		\item اندیس ویژگی‌های انتخابی در فایل \lr{selected\_features.txt}
-	\end{itemize}
-	
-	
-	\section{فاز سوم: خوشه‌بندی}
-	
-	\subsection{اهداف اصلی}
-	\begin{itemize}
-		\item پیاده‌سازی ۴ الگوریتم خوشه‌بندی مختلف
-		\item تنظیم پارامترهای هر الگوریتم
-		\item مقایسه عملکرد الگوریتم‌ها و انتخاب بهترین روش
-		\item تحلیل ویژگی‌های متمایزکننده هر خوشه
-	\end{itemize}
-	
-	\subsection{بخش اصلی کد}
-	\begin{latin}
-		\begin{verbatim}
-			# Initialize clustering algorithms
-			algorithms = {
-				'KMeans': KMeans(n_clusters=k, random_state=42),
-				'Agglomerative': AgglomerativeClustering(n_clusters=k),
-				'DBSCAN': DBSCAN(eps=0.3, min_samples=5),
-				'MeanShift': MeanShift(bandwidth=0.5)
-			}
-			
-			# Evaluate and compare algorithms
-			results = []
-			for name, algorithm in algorithms.items():
-			labels = algorithm.fit_predict(X_scaled)
-			score = silhouette_score(X_scaled, labels)
-			results.append({
-				'name': name,
-				'labels': labels,
-				'score': score,
-				'n_clusters': len(np.unique(labels))
-			})
-			
-			# Visualize cluster characteristics
-			cluster_means = df.groupby('cluster').mean()
-			sns.heatmap(cluster_means, annot=True, cmap="YlGnBu")
-			plt.savefig("cluster_heatmap.png")
-		\end{verbatim}
-	\end{latin}
-	
-	\subsection{نکات کلیدی}
-	\begin{itemize}
-		\item از معیار \lr{Silhouette Score} برای ارزیابی کیفیت خوشه‌بندی استفاده شده است
-		\item داده‌ها قبل از خوشه‌بندی نرمال شده‌اند
-		\item نتایج به صورت مصورسازی‌های مختلف ذخیره می‌شوند
-		\item برای هر الگوریتم پارامترهای بهینه انتخاب شده‌اند
-	\end{itemize}
-	
-	\subsection{خروجی‌ها}
-	\begin{itemize}
-		\item فایل \lr{clustered\_results.csv}: داده‌های خوشه‌بندی شده
-		\item تصاویر \lr{all\_clustering\_results.png} و \lr{best\_clustering\_result.png}: نتایج خوشه‌بندی
-		\item تصویر \lr{cluster\_heatmap.png}: ویژگی‌های متمایزکننده هر خوشه
-	\end{itemize}
-	
-	\section{فاز چهارم: مصورسازی نتایج}
-	
-	\subsection{اهداف اصلی}
-	\begin{itemize}
-		\item کاهش ابعاد داده‌ها برای نمایش بهتر
-		\item نمایش بصری نتایج خوشه‌بندی
-		\item مقایسه روش‌های مختلف کاهش ابعاد
-	\end{itemize}
-	
-	\subsection{بخش اصلی کد}
-	\begin{latin}
-		\begin{verbatim}
-			# PCA 2D Visualization
-			pca = PCA(n_components=2)
-			X_pca = pca.fit_transform(X)
-			plt.scatter(X_pca[:,0], X_pca[:,1], c=labels, cmap='viridis')
-			plt.title('PCA 2D Projection')
-			plt.savefig('pca_2d.png')
-			
-			# PCA 3D Visualization
-			pca_3d = PCA(n_components=3)
-			X_pca_3d = pca_3d.fit_transform(X)
-			fig = plt.figure()
-			ax = fig.add_subplot(111, projection='3d')
-			ax.scatter(X_pca_3d[:,0], X_pca_3d[:,1], X_pca_3d[:,2], c=labels)
-			plt.savefig('pca_3d.png')
-			
-			# t-SNE Visualization
-			tsne = TSNE(n_components=2, random_state=42)
-			X_tsne = tsne.fit_transform(X)
-			plt.scatter(X_tsne[:,0], X_tsne[:,1], c=labels, cmap='coolwarm')
-			plt.title('t-SNE Projection')
-			plt.savefig('tsne_2d.png')
-		\end{verbatim}
-	\end{latin}
-	
-	\subsection{نکات کلیدی}
-	\begin{itemize}
-		\item از دو روش کاهش ابعاد PCA و t-SNE استفاده شده است
-		\item نتایج هم در ۲ بعد و هم در ۳ بعد نمایش داده شده‌اند
-		\item رنگ‌های مختلف نشان‌دهنده خوشه‌های مختلف هستند
-		\item تصاویر با کیفیت بالا ذخیره می‌شوند
-	\end{itemize}
-	
-	\subsection{خروجی‌ها}
-	\begin{itemize}
-		\item \lr{pca\_2d.png}: نمایش دو بعدی با PCA
-		\item \lr{pca\_3d.png}: نمایش سه بعدی با PCA
-		\item \lr{tsne\_2d.png}: نمایش دو بعدی با t-SNE
-	\end{itemize}
-	
-	\subsection{تحلیل نتایج}
-	\begin{itemize}
-		\item PCA برای نمایش کلی ساختار داده مناسب است
-		\item t-SNE برای نمایش روابط غیرخطی و حفظ فاصله‌های محلی بهتر عمل می‌کند
-		\item نمایش سه بعدی می‌تواند بینش بهتری از توزیع داده‌ها ارائه دهد
-	\end{itemize}
-	
-	
+\subsubsection*{\textbf{هیت‌مپ }}
+در طراحی این هیت‌مپ، برای هر یک از خوشه‌های شناسایی‌شده، میانگین مقدار هر ویژگی محاسبه شده است. این محاسبات بر روی داده‌های استانداردشده انجام گرفته تا امکان مقایسه معنادار بین ویژگی‌های مختلف فراهم شود. مقادیر به دست آمده سپس به دامنه‌ای بین ۰ تا ۱ نرمال‌سازی شده‌اند تا تغییرات رنگ‌ها به خوبی قابل تفسیر باشند.
+هیت مپ امکان شناسایی خوشه‌هایی با ویژگی‌های مشابه را فراهم کرده است و ویژگی‌های کلیدی که هر خوشه را از دیگران متمایز می‌کند، به وضوح قابل تشخیص بوده‌اند. همچنین یکنواختی یا عدم یکنواختی توزیع ویژگی‌ها در بین خوشه‌ها به راحتی قابل ارزیابی بوده است.
+
+\clearpage
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{cluster_characteristics.png}
+\caption{هیت مپ}
+\label{fig:hitmap}
+\end{figure}
+
 	\section{فاز پنجم: ارزیابی خوشه‌بندی}
 	
 	\subsection*{\textbf{اهداف اصلی}}
