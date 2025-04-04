@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (MiKTeX 24.1) (preloaded format=xelatex 2024.3.5)  3 APR 2025 20:40
+This is XeTeX, Version 3.141592653-2.6-0.999995 (MiKTeX 24.1) (preloaded format=xelatex 2024.3.5)  4 APR 2025 20:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -640,17 +640,7 @@ File: cluster_characteristics.png Graphic file (type bmp)
 <cluster_characteristics.png>
  [7
 
-] [8]
-Underfull \hbox (badness 10000) in paragraph at lines 328--342
-[][]
- []
-
-File: test_samples_with_cluster_members.png Graphic file (type bmp)
-<test_samples_with_cluster_members.png>
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[9] [10] (document.aux)
+] [8] [9] (document.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
@@ -661,12 +651,12 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 8058 strings out of 409588
- 184904 string characters out of 5772810
+ 8049 strings out of 409588
+ 184523 string characters out of 5772810
  1928842 words of memory out of 5000000
- 30016 multiletter control sequences out of 15000+600000
+ 30008 multiletter control sequences out of 15000+600000
  562922 words of font info for 80 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  94i,5n,107p,1021b,348s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on document.pdf (10 pages).
+Output written on document.pdf (9 pages).
