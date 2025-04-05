@@ -94,7 +94,7 @@ def main():
     # Visualization
     plot_cluster_samples(results_df, test_image_paths, test_classes, test_clusters)
 
-def plot_cluster_samples(results_df, image_paths, classes, clusters, n_samples=15):
+def plot_cluster_samples(results_df, image_paths, classes, clusters, n_samples=10):
     plt.figure(figsize=(20, 25))
     plt.suptitle("Test Samples with Cluster Members", fontsize=16, y=1.02)
 
